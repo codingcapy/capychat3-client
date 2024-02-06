@@ -27,8 +27,7 @@ export default function Dashboard() {
     const [friend, setFriend] = useState("")
     const [friends, setFriends] = useState(user.friends)
     const [chats, setChats] = useState(user.chats)
-    const [currentChat, setCurrentChat] = useState({ messages: [] })
-    const [messages, setMessages] = useState(currentChat.messages)
+    const [currentChat, setCurrentChat] = useState(null)
 
     function tappedChats() {
         setChatsMode(true);
@@ -54,8 +53,9 @@ export default function Dashboard() {
         setShowFriend(false)
         setShowDefault(false)
     }
-    function clickedChat(chat) {
-        setCurrentChat(chat)
+    async function clickedChat(chat) {
+        const newChat = await axios.get(`${DOMAIN}/api/chats/${chat.chatId}`)
+        setCurrentChat(newChat.data)
         console.log("current chat is")
         console.log(currentChat)
         setShowMessages(true)
@@ -99,10 +99,14 @@ export default function Dashboard() {
         const message = { content, user: currentUser, chatId: currentChat.chatId }
         const res = await axios.post(`${DOMAIN}/api/messages`, message)
         if (res?.data.success) {
+            console.log(`${DOMAIN}/api/chats/${currentChat.chatId}`)
             const newChat = await axios.get(`${DOMAIN}/api/chats/${currentChat.chatId}`)
             setMessage(res?.data.message)
-            console.log(newChat.data.chats)
-            setMessages(newChat.data.messages)
+            console.log("what")
+            console.log(newChat)
+            console.log(newChat.data)
+            console.log(newChat.data.messages)
+            setCurrentChat(newChat.data)
         }
         else {
             setMessage(res?.data.message)
@@ -131,7 +135,7 @@ export default function Dashboard() {
                         {showDefault && <div className="px-5 border-2 border-slate-600 bg-slate-800 min-w-full h-screen overflow-y-auto">
                             <div className="text-xl sticky top-0 bg-slate-800 py-5">Messages</div>
                         </div>}
-                        {showMessages && <Messages currentChat={currentChat} currentUser={user.username} />}
+                        {showMessages && <Messages currentChat={currentChat} currentUser={user.username} handleCreateMessage={handleCreateMessage} message={message} />}
                         {showAddFriend && <AddFriend currentUser={user.username} setFriends={setFriends} user={user} />}
                         {showFriend && <FriendProfile handleCreateChat={handleCreateChat} friendName={friend} message={message} />}
                         <div className="flex flex-col">
