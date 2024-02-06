@@ -19,13 +19,16 @@ export default function Dashboard() {
     const [chatsMode, setChatsMode] = useState(true);
     const [messagesMode, setMessagesMode] = useState(false);
     const [friendsMode, setFriendsMode] = useState(false);
+    const [showDefault, setShowDefault] = useState(true)
     const [showAddFriend, setShowAddFriend] = useState(false)
     const [showFriend, setShowFriend] = useState(false)
-    const [showMessages, setShowMessages] = useState(true)
+    const [showMessages, setShowMessages] = useState(false)
     const [isMenuSticky, setIsMenuSticky] = useState(false);
     const [friend, setFriend] = useState("")
     const [friends, setFriends] = useState(user.friends)
+    const [chats, setChats] = useState(user.chats)
     const [currentChat, setCurrentChat] = useState({ messages: [] })
+    const [messages, setMessages] = useState(currentChat.messages)
 
     function tappedChats() {
         setChatsMode(true);
@@ -33,7 +36,7 @@ export default function Dashboard() {
         setFriendsMode(false);
     }
 
-    function tappedMessages() {
+    function tappedChat() {
         setChatsMode(false);
         setMessagesMode(true);
         setFriendsMode(false);
@@ -49,6 +52,7 @@ export default function Dashboard() {
         setShowMessages(false)
         setShowAddFriend(true)
         setShowFriend(false)
+        setShowDefault(false)
     }
     function clickedChat(chat) {
         setCurrentChat(chat)
@@ -57,27 +61,48 @@ export default function Dashboard() {
         setShowMessages(true)
         setShowAddFriend(false)
         setShowFriend(false)
+        setShowDefault(false)
+        tappedChat()
     }
     function clickedFriend(username) {
         setFriend(username);
         setShowMessages(false)
         setShowAddFriend(false)
         setShowFriend(true)
+        setShowDefault(false)
     }
 
     const [message, setMessage] = useState("")
 
-    async function handleSubmit(e) {
+    async function handleCreateChat(e) {
         e.preventDefault()
-        const username = props.currentUser
-        const friend = e.target.frienduser.value;
-        const data = { username, friend }
-        const res = await axios.post(`${DOMAIN}/api/user/friends`, data)
+        const title = e.target.title.value
+        const currentUser = user.username
+        const currentFriend = friend;
+        const chat = { title, user: currentUser, friend: currentFriend }
+        const res = await axios.post(`${DOMAIN}/api/chats`, chat)
         if (res?.data.success) {
-            const user = await axios.get(`${DOMAIN}/api/user/${props.user.userId}`)
+            const user1 = await axios.get(`${DOMAIN}/api/users/${user.userId}`)
             setMessage(res?.data.message)
-            props.setFriends(user.friends)
-            navigate(`/dashboard/${props.user.userId}`)
+            console.log(user1.data.chats)
+            setChats(user1.data.chats)
+        }
+        else {
+            setMessage(res?.data.message)
+        }
+    }
+
+    async function handleCreateMessage(e) {
+        e.preventDefault()
+        const content = e.target.content.value
+        const currentUser = user.username
+        const message = { content, user: currentUser, chatId: currentChat.chatId }
+        const res = await axios.post(`${DOMAIN}/api/messages`, message)
+        if (res?.data.success) {
+            const newChat = await axios.get(`${DOMAIN}/api/chats/${currentChat.chatId}`)
+            setMessage(res?.data.message)
+            console.log(newChat.data.chats)
+            setMessages(newChat.data.messages)
         }
         else {
             setMessage(res?.data.message)
@@ -102,19 +127,23 @@ export default function Dashboard() {
                 <div className="hidden md:flex">
                     <div className="flex">
                         <Friends clickedAddFriend={clickedAddFriend} clickedFriend={clickedFriend} friends={friends} />
-                        <Chats clickedChat={clickedChat} chats={user.chats} />
+                        <Chats clickedChat={clickedChat} chats={chats} />
+                        {showDefault && <div className="px-5 border-2 border-slate-600 bg-slate-800 min-w-full h-screen overflow-y-auto">
+                            <div className="text-xl sticky top-0 bg-slate-800 py-5">Messages</div>
+                        </div>}
                         {showMessages && <Messages currentChat={currentChat} currentUser={user.username} />}
                         {showAddFriend && <AddFriend currentUser={user.username} setFriends={setFriends} user={user} />}
-                        {showFriend && <FriendProfile currentUser={user} friendName={friend} />}
+                        {showFriend && <FriendProfile handleCreateChat={handleCreateChat} friendName={friend} message={message} />}
                         <div className="flex flex-col">
                             <NavLink to={`/dashboard/${user.userId}`} className="px-5 py-5 bg-slate-800 font-bold">{user.username}</NavLink>
                             <NavLink to="/" onClick={logoutService} className="px-5 bg-slate-800">Logout</NavLink>
                         </div>
                     </div>
                 </div>
-                <div className="px-3">
-                    {chatsMode && <Chats />}
+                <div className="px-3 md:hidden">
+                    {chatsMode && <Chats chats={chats} clickedChat={clickedChat} />}
                     {friendsMode && <Friends clickedAddFriend={clickedAddFriend} clickedFriend={clickedFriend} friends={friends} />}
+                    {messagesMode && <Messages currentChat={currentChat} currentUser={user.username} />}
                 </div>
             </main>
             <div
