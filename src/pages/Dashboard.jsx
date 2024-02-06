@@ -106,7 +106,10 @@ export default function Dashboard() {
                         {showMessages && <Messages currentChat={currentChat} currentUser={user.username} />}
                         {showAddFriend && <AddFriend currentUser={user.username} setFriends={setFriends} user={user} />}
                         {showFriend && <FriendProfile currentUser={user} friendName={friend} />}
-                        <NavLink to="/" onClick={logoutService} className="px-5 py-5 bg-slate-800">Logout</NavLink>
+                        <div className="flex flex-col">
+                            <NavLink to={`/dashboard/${user.userId}`} className="px-5 py-5 bg-slate-800 font-bold">{user.username}</NavLink>
+                            <NavLink to="/" onClick={logoutService} className="px-5 bg-slate-800">Logout</NavLink>
+                        </div>
                     </div>
                 </div>
                 <div className="px-3">
