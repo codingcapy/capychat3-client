@@ -1,14 +1,16 @@
 
 
 
-import { NavLink } from "react-router-dom";
+import { NavLink, useLoaderData } from "react-router-dom";
 import useAuthStore from "../store/AuthStore";
 import { useState, useEffect } from "react";
 import Friends from "../components/Friends";
 import Chats from "../components/Chats";
 import Messages from "../components/Messages";
 import AddFriend from "../components/AddFriend";
-
+import axios from "axios";
+import DOMAIN from "../services/endpoint";
+import FriendProfile from "../components/FriendProfile";
 
 
 export default function Dashboard() {
@@ -22,6 +24,7 @@ export default function Dashboard() {
     const [showMessages, setShowMessages] = useState(true)
     const [isMenuSticky, setIsMenuSticky] = useState(false);
     const [friend, setFriend] = useState("")
+    const [friends, setFriends] = useState(user.friends)
     const [currentChat, setCurrentChat] = useState({ messages: [] })
 
     function tappedChats() {
@@ -62,6 +65,25 @@ export default function Dashboard() {
         setShowFriend(true)
     }
 
+    const [message, setMessage] = useState("")
+
+    async function handleSubmit(e) {
+        e.preventDefault()
+        const username = props.currentUser
+        const friend = e.target.frienduser.value;
+        const data = { username, friend }
+        const res = await axios.post(`${DOMAIN}/api/user/friends`, data)
+        if (res?.data.success) {
+            const user = await axios.get(`${DOMAIN}/api/user/${props.user.userId}`)
+            setMessage(res?.data.message)
+            props.setFriends(user.friends)
+            navigate(`/dashboard/${props.user.userId}`)
+        }
+        else {
+            setMessage(res?.data.message)
+        }
+    }
+
     useEffect(() => {
         function handleScroll() {
             const scrollPosition = window.scrollY;
@@ -75,23 +97,34 @@ export default function Dashboard() {
     }, []);
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col min-h-screen bg-slate-800 text-white">
             <main className="flex-1">
                 <div className="hidden md:flex">
                     <div className="flex">
-                        <Friends clickedAddFriend={clickedAddFriend} clickedFriend={clickedFriend} friends={user.friends} />
+                        <Friends clickedAddFriend={clickedAddFriend} clickedFriend={clickedFriend} friends={friends} />
                         <Chats clickedChat={clickedChat} chats={user.chats} />
                         {showMessages && <Messages currentChat={currentChat} currentUser={user.username} />}
-                        {showAddFriend && <AddFriend currentUser={user.username} />}
-                        <NavLink to="/" onClick={logoutService}>Logout</NavLink>
+                        {showAddFriend && <AddFriend currentUser={user.username} setFriends={setFriends} user={user} />}
+                        {showFriend && <FriendProfile currentUser={user} friendName={friend} />}
+                        <NavLink to="/" onClick={logoutService} className="px-5 py-5 bg-slate-800">Logout</NavLink>
                     </div>
+                </div>
+                <div className="px-3">
+                    {chatsMode && <Chats />}
+                    {friendsMode && <Friends clickedAddFriend={clickedAddFriend} clickedFriend={clickedFriend} friends={friends} />}
                 </div>
             </main>
             <div
-                className={`flex py-5 md:hidden sticky z-10 bg-white ${isMenuSticky ? "top-0" : "bottom-0"
+                className={`flex justify-between py-5 md:hidden sticky z-10 bg-slate-800 ${isMenuSticky ? "top-0" : "bottom-0"
                     }`}
             >
-                <NavLink to="/" onClick={logoutService}>Logout</NavLink>
+                <div className="px-5" onClick={() => tappedFriends()}>
+                    Friends
+                </div>
+                <div className="px-5" onClick={tappedChats}>
+                    Chats
+                </div>
+                <NavLink to="/" onClick={logoutService} className="px-5">Logout</NavLink>
             </div>
         </div>
     )

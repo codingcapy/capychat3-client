@@ -21,9 +21,9 @@ export default function Messages(props) {
     console.log(props.currentChat)
 
     return (
-        <div className="px-5 border-2 min-w-full h-screen overflow-y-auto">
-            <div className="text-xl sticky top-0 bg-white py-5">Chat 1</div>
-            <div className="sticky top-16 bg-white py-5">+ Invite friend</div>
+        <div className="px-5 border-2 border-slate-600 bg-slate-800 min-w-full h-screen overflow-y-auto">
+            <div className="text-xl sticky top-0 bg-slate-800 py-5">Chat 1</div>
+            <div className="sticky top-16 bg-slate-800 py-5">+ Invite friend</div>
             <div>
                 <div className="py-2">
                     <div className="flex"><div className="font-bold">user123</div><div className="pl-2">on 2024-01-19 12:34 PM</div></div>
@@ -38,7 +38,7 @@ export default function Messages(props) {
                     <div>🔥🔥🔥🔥🔥🔥🔥🔥</div>
                 </div>
                 {props.currentChat.messages.map((message)=><div>{message.content}</div>)}
-                <div className={`py-10 bg-white sticky z-20 ${isMenuSticky ? "top-0" : "bottom-0"
+                <div className={`py-10 bg-slate-800 sticky z-20 ${isMenuSticky ? "top-0" : "bottom-0"
                     }`}>
                     <form>
                         <div className="flex">

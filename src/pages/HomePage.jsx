@@ -19,7 +19,7 @@ export default function HomePage() {
                 <div className="border rounded-xl py-5 px-5 my-5 bg-indigo-600 text-white">
                     <NavLink to="/users/login">Login</NavLink>
                 </div>
-                <NavLink to="/users/signup" className="underline">Sign Up</NavLink>
+                <NavLink to="/users/signup" className="underline text-indigo-800">Sign Up</NavLink>
             </div>}
             </main>
             <Footer />
