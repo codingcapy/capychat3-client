@@ -33,8 +33,8 @@ export default function Messages(props) {
                     }`}>
                     <form onSubmit={props.handleCreateMessage}>
                         <div className="flex">
-                            <input type="text" id="content" name="content" placeholder="write a message" required className="py-2 px-2 min-w-96 text-black" />
-                            <button type="submit" className=" mx-2 px-5 py-5 rounded-xl bg-yellow-600 text-white">Send</button>
+                            <input type="text" id="content" name="content" placeholder="write a message" value={props.inputMessage} onChange={(e)=>props.setInputMessage(e.target.value)}required className="py-2 px-2 my-2 rounded-xl md:min-w-96 text-black" />
+                            <button type="submit" className=" mx-2 px-5 rounded-xl bg-yellow-600 text-white">Send</button>
                         </div>
                     </form>
                 </div>

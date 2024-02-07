@@ -9,6 +9,7 @@ export default function AddFriend(props) {
 
     const navigate = useNavigate();
     const [message, setMessage] = useState("")
+    const [inputFriend, setinputFriend] = useState("")
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -20,10 +21,12 @@ export default function AddFriend(props) {
             setMessage(res?.data.message)
             const user = await axios.get(`${DOMAIN}/api/users/${props.user.userId}`)
             props.setFriends(user.data.friends)
-            navigate(`/dashboard/${props.user.userId}`)
+            setinputFriend("")
+            // navigate(`/dashboard/${props.user.userId}`)
         }
         else {
             setMessage(res?.data.message)
+            setinputFriend("")
         }
     }
 
@@ -33,7 +36,7 @@ export default function AddFriend(props) {
                 <h2 className="py-10 text-2xl text-slate-700 font-medium text-center">Add Friend</h2>
                 <div className="flex flex-col">
                     <label htmlFor="username">Username</label>
-                    <input type="text" name="frienduser" id="frienduser" placeholder="Username" required className="px-2 border rounded-lg border-slate-700 py-1 text-black" />
+                    <input type="text" name="frienduser" id="frienduser" placeholder="Username" value={inputFriend} onChange={(e) => setinputFriend(e.target.value)} required className="px-2 border rounded-lg border-slate-700 py-1 text-black" />
                 </div>
                 <button className="rounded-xl my-5 py-2 px-2 bg-slate-700 text-white">Add</button>
             </form>

@@ -12,7 +12,7 @@ export default function FriendProfile(props) {
             {!expanded && <button className="rounded-xl my-5 py-2 px-2 bg-slate-700 text-white" onClick={()=>setExpanded(true)}>Start Chat</button>}
             {expanded && <form onSubmit={props.handleCreateChat} className="flex flex-col">
                 <label htmlFor="title">Chat Title (optional)</label>
-                <input type="text" name="title" id="title" defaultValue={props.friendName} required className="px-2 border rounded-lg border-slate-700 py-1 text-black"/>
+                <input type="text" name="title" id="title" defaultValue={`${props.friendName}, ${props.user.username}`} className="px-2 border rounded-lg border-slate-700 py-1 text-black"/>
                 <button className="rounded-xl my-5 py-2 px-2 bg-slate-700 text-white">Start Chat</button>
             </form>}
             {props.message}
