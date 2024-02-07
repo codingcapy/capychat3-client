@@ -133,12 +133,19 @@ export default function Dashboard() {
             setMessage(res?.data.message)
             setCurrentChat(newChat.data)
             setInputMessage("")
+            socket.emit("message", message);
         }
         else {
             setMessage(res?.data.message)
             setInputMessage("")
         }
     }
+
+    useEffect(() => {
+        socket.on("message", setCurrentChat(currentChat));
+        console.log(message);
+        return () => socket.off("message", setCurrentChat(currentChat));
+    }, []);
 
     useEffect(() => {
         function handleScroll() {
@@ -162,9 +169,9 @@ export default function Dashboard() {
                         {showDefault && <div className="px-5 border-2 border-slate-600 bg-slate-800 min-w-full h-screen overflow-y-auto">
                             <div className="text-xl sticky top-0 bg-slate-800 py-5">Messages</div>
                         </div>}
-                        {showMessages && <Messages currentChat={currentChat} currentUser={user.username} handleCreateMessage={handleCreateMessage} message={message} inputMessage={inputMessage} setInputMessage={setInputMessage}/>}
+                        {showMessages && <Messages currentChat={currentChat} currentUser={user.username} handleCreateMessage={handleCreateMessage} message={message} inputMessage={inputMessage} setInputMessage={setInputMessage} />}
                         {showAddFriend && <AddFriend currentUser={user.username} setFriends={setFriends} user={user} />}
-                        {showFriend && <FriendProfile handleCreateChat={handleCreateChat} friendName={friend} user={user} message={message} inputChat={inputChat} setInputChat={setInputChat}/>}
+                        {showFriend && <FriendProfile handleCreateChat={handleCreateChat} friendName={friend} user={user} message={message} inputChat={inputChat} setInputChat={setInputChat} />}
                         <div className="flex flex-col">
                             <NavLink to={`/dashboard/${user.userId}`} className="px-5 py-5 bg-slate-800 font-bold">{user.username}</NavLink>
                             <NavLink to="/" onClick={logoutService} className="px-5 bg-slate-800">Logout</NavLink>
