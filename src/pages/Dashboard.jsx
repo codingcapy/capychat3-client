@@ -142,10 +142,15 @@ export default function Dashboard() {
     }
 
     useEffect(() => {
-        socket.on("message", setCurrentChat(currentChat));
+        socket.on("message", receiveMessage);
         console.log(message);
-        return () => socket.off("message", setCurrentChat(currentChat));
+        return () => socket.off("message", receiveMessage);
     }, []);
+
+    async function receiveMessage(){
+        const newChat = await axios.get(`${DOMAIN}/api/chats/${currentChat.chatId}`)
+        setCurrentChat(newChat.data)
+    }
 
     useEffect(() => {
         function handleScroll() {
@@ -181,7 +186,7 @@ export default function Dashboard() {
                 <div className="px-3 md:hidden">
                     {chatsMode && <Chats chats={chats} clickedChat={clickedChat} />}
                     {friendsMode && <Friends clickedAddFriend={clickedAddFriend} clickedFriend={clickedFriend} friends={friends} />}
-                    {messagesMode && <Messages currentChat={currentChat} currentUser={user.username} handleCreateMessage={handleCreateMessage} message={message} />}
+                    {messagesMode && <Messages currentChat={currentChat} currentUser={user.username} handleCreateMessage={handleCreateMessage} message={message} inputMessage={inputMessage} setInputMessage={setInputMessage} />}
                     {showAddFriend && <AddFriend currentUser={user.username} setFriends={setFriends} user={user} />}
                     {showFriend && <FriendProfile handleCreateChat={handleCreateChat} friendName={friend} message={message} />}
                 </div>
