@@ -2,16 +2,18 @@
 
 
 import { NavLink, useLoaderData } from "react-router-dom";
-import useAuthStore from "../store/AuthStore";
 import { useState, useEffect } from "react";
+import io from "socket.io-client";
+import axios from "axios";
+import DOMAIN from "../services/endpoint";
+import useAuthStore from "../store/AuthStore";
 import Friends from "../components/Friends";
 import Chats from "../components/Chats";
 import Messages from "../components/Messages";
 import AddFriend from "../components/AddFriend";
-import axios from "axios";
-import DOMAIN from "../services/endpoint";
 import FriendProfile from "../components/FriendProfile";
 
+const socket = io("http://localhost:3333");
 
 export default function Dashboard() {
 
