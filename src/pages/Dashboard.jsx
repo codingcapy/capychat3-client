@@ -116,6 +116,7 @@ export default function Dashboard() {
             setMessage(res?.data.message)
             setChats(user1.data.chats)
             setInputChat("")
+            socket.emit("chat", chat);
         }
         else {
             setMessage(res?.data.message)
@@ -156,6 +157,17 @@ export default function Dashboard() {
         setCurrentChat(newChat.data)
         console.log("after")
         console.log(currentChat)
+    }
+
+    useEffect(() => {
+        socket.on("chat", receiveChat);
+        return () => socket.off("chat", receiveChat);
+    }, [chats]);
+
+    async function receiveChat() {
+        const newUser = await axios.get(`${DOMAIN}/api/users/${user.userId}`)
+        console.log(newUser)
+        setChats(newUser.data.chats)
     }
 
     useEffect(() => {

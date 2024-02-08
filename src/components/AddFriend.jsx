@@ -2,8 +2,11 @@
 
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import io from "socket.io-client";
 import axios from "axios";
 import DOMAIN from "../services/endpoint";
+
+const socket = io("http://localhost:3333");
 
 export default function AddFriend(props) {
 
@@ -22,6 +25,7 @@ export default function AddFriend(props) {
             const user = await axios.get(`${DOMAIN}/api/users/${props.user.userId}`)
             props.setFriends(user.data.friends)
             setinputFriend("")
+            socket.emit("friend", data);
             // navigate(`/dashboard/${props.user.userId}`)
         }
         else {

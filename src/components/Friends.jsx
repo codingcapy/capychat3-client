@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react"
 
+
+import { useEffect, useState } from "react"
 
 export default function Friends(props) {
 
@@ -15,8 +16,8 @@ export default function Friends(props) {
             <div>
                 <div className="py-5 cursor-pointer" onClick={() => props.clickedAddFriend()} >+ Add a Friend</div>
                 {props.friends.map((friend) => <div key={friend} onClick={() => props.clickedFriend(friend)} className="cursor-pointer">
-            {friend}
-        </div>)}
+                    {friend}
+                </div>)}
             </div>
         </div>
     )
