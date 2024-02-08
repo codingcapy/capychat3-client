@@ -1,14 +1,20 @@
 
+/*
+author: Paul Kim
+date: February 8, 2024
+version: 1.0
+description: header component for CapyTalk client
+ */
 
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 
 export default function Header() {
 
-    const [expandedMenu, setExpandedMenu] = useState(window.innerWidth > 500 ? true : false)
+    const [expandedMenu, setExpandedMenu] = useState(window.innerWidth > 500 ? true : false);
 
     function toggleMenu() {
-        setExpandedMenu(!expandedMenu)
+        setExpandedMenu(!expandedMenu);
     }
 
     return (

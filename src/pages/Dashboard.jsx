@@ -1,7 +1,12 @@
 
+/*
+author: Paul Kim
+date: February 8, 2024
+version: 1.0
+description: dashboard for CapyTalk client
+ */
 
-
-import { NavLink, useLoaderData } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import io from "socket.io-client";
 import axios from "axios";
@@ -17,24 +22,24 @@ const socket = io("http://localhost:3333");
 
 export default function Dashboard() {
 
-    const { logoutService, user } = useAuthStore((state) => state)
+    const { logoutService, user } = useAuthStore((state) => state);
     const [chatsMode, setChatsMode] = useState(true);
     const [messagesMode, setMessagesMode] = useState(false);
     const [friendsMode, setFriendsMode] = useState(false);
     const [addFriendMode, setAddFriendMode] = useState(false);
     const [friendMode, setFriendMode] = useState(false);
-    const [showDefault, setShowDefault] = useState(true)
-    const [showAddFriend, setShowAddFriend] = useState(false)
-    const [showFriend, setShowFriend] = useState(false)
-    const [showMessages, setShowMessages] = useState(false)
+    const [showDefault, setShowDefault] = useState(true);
+    const [showAddFriend, setShowAddFriend] = useState(false);
+    const [showFriend, setShowFriend] = useState(false);
+    const [showMessages, setShowMessages] = useState(false);
     const [isMenuSticky, setIsMenuSticky] = useState(false);
-    const [friend, setFriend] = useState("")
-    const [friends, setFriends] = useState(user.friends)
-    const [chats, setChats] = useState(user.chats)
-    const [currentChat, setCurrentChat] = useState(null)
-    const [currentChatId, setCurrentChatId] = useState(null)
-    const [inputChat, setInputChat] = useState("")
-    const [inputMessage, setInputMessage] = useState("")
+    const [friend, setFriend] = useState("");
+    const [friends, setFriends] = useState(user.friends);
+    const [chats, setChats] = useState(user.chats);
+    const [currentChat, setCurrentChat] = useState(null);
+    const [currentChatId, setCurrentChatId] = useState(null);
+    const [inputChat, setInputChat] = useState("");
+    const [inputMessage, setInputMessage] = useState("");
 
     function tappedChats() {
         setChatsMode(true);
@@ -59,6 +64,7 @@ export default function Dashboard() {
         setAddFriendMode(false);
         setFriendMode(false);
     }
+
     function tappedAddFriend() {
         setChatsMode(false);
         setMessagesMode(false);
@@ -66,6 +72,7 @@ export default function Dashboard() {
         setAddFriendMode(true);
         setFriendMode(false);
     }
+
     function tappedFriend() {
         setChatsMode(false);
         setMessagesMode(false);
@@ -75,71 +82,71 @@ export default function Dashboard() {
     }
 
     function clickedAddFriend() {
-        setShowMessages(false)
-        setShowAddFriend(true)
-        setShowFriend(false)
-        setShowDefault(false)
-        tappedAddFriend()
+        setShowMessages(false);
+        setShowAddFriend(true);
+        setShowFriend(false);
+        setShowDefault(false);
+        tappedAddFriend();
     }
+
     async function clickedChat(chat) {
-        const newChat = await axios.get(`${DOMAIN}/api/chats/${chat.chatId}`)
-        setCurrentChatId(chat.chatId)
-        setCurrentChat(newChat.data)
-        console.log("current chat is")
-        setShowMessages(true)
-        console.log(currentChat) // null
-        setShowAddFriend(false)
-        setShowFriend(false)
-        setShowDefault(false)
-        tappedChat()
+        const newChat = await axios.get(`${DOMAIN}/api/chats/${chat.chatId}`);
+        setCurrentChatId(chat.chatId);
+        setCurrentChat(newChat.data);
+        setShowMessages(true);
+        setShowAddFriend(false);
+        setShowFriend(false);
+        setShowDefault(false);
+        tappedChat();
     }
+
     function clickedFriend(username) {
         setFriend(username);
-        setShowMessages(false)
-        setShowAddFriend(false)
-        setShowFriend(true)
-        setShowDefault(false)
-        tappedFriend()
+        setShowMessages(false);
+        setShowAddFriend(false);
+        setShowFriend(true);
+        setShowDefault(false);
+        tappedFriend();
     }
 
-    const [message, setMessage] = useState("")
+    const [message, setMessage] = useState("");
 
     async function handleCreateChat(e) {
-        e.preventDefault()
-        const title = e.target.title.value
-        const currentUser = user.username
+        e.preventDefault();
+        const title = e.target.title.value;
+        const currentUser = user.username;
         const currentFriend = friend;
-        const chat = { title, user: currentUser, friend: currentFriend }
-        const res = await axios.post(`${DOMAIN}/api/chats`, chat)
+        const chat = { title, user: currentUser, friend: currentFriend };
+        const res = await axios.post(`${DOMAIN}/api/chats`, chat);
         if (res?.data.success) {
-            const user1 = await axios.get(`${DOMAIN}/api/users/${user.userId}`)
-            setMessage(res?.data.message)
-            setChats(user1.data.chats)
-            setInputChat("")
+            const user1 = await axios.get(`${DOMAIN}/api/users/${user.userId}`);
+            setMessage(res?.data.message);
+            setChats(user1.data.chats);
+            setInputChat("");
             socket.emit("chat", chat);
         }
         else {
-            setMessage(res?.data.message)
-            setInputChat("")
+            setMessage(res?.data.message);
+            setInputChat("");
         }
     }
 
     async function handleCreateMessage(e) {
-        e.preventDefault()
-        const content = e.target.content.value
-        const currentUser = user.username
-        const message = { content, user: currentUser, chatId: currentChat.chatId }
-        const res = await axios.post(`${DOMAIN}/api/messages`, message)
+        e.preventDefault();
+        const content = e.target.content.value;
+        const currentUser = user.username;
+        const message = { content, user: currentUser, chatId: currentChat.chatId };
+        const res = await axios.post(`${DOMAIN}/api/messages`, message);
         if (res?.data.success) {
-            const newChat = await axios.get(`${DOMAIN}/api/chats/${currentChat.chatId}`)
-            setMessage(res?.data.message)
-            setCurrentChat(newChat.data)
-            setInputMessage("")
+            const newChat = await axios.get(`${DOMAIN}/api/chats/${currentChat.chatId}`);
+            setMessage(res?.data.message);
+            setCurrentChat(newChat.data);
+            setInputMessage("");
             socket.emit("message", message);
         }
         else {
-            setMessage(res?.data.message)
-            setInputMessage("")
+            setMessage(res?.data.message);
+            setInputMessage("");
         }
     }
 
@@ -149,8 +156,8 @@ export default function Dashboard() {
     }, [currentChat]);
 
     async function receiveMessage() {
-        const newChat = await axios.get(`${DOMAIN}/api/chats/${currentChat.chatId}`)
-        setCurrentChat(newChat.data)
+        const newChat = await axios.get(`${DOMAIN}/api/chats/${currentChat.chatId}`);
+        setCurrentChat(newChat.data);
     }
 
     useEffect(() => {
@@ -159,25 +166,18 @@ export default function Dashboard() {
     }, [chats]);
 
     async function receiveChat() {
-        const newUser = await axios.get(`${DOMAIN}/api/users/${user.userId}`)
-        setChats(newUser.data.chats)
+        const newUser = await axios.get(`${DOMAIN}/api/users/${user.userId}`);
+        setChats(newUser.data.chats);
     }
 
     useEffect(() => {
-        console.log("use effect props friends:")
-        console.log(friends)
         socket.on("friend", receiveFriend);
         return () => socket.off("friend", receiveFriend);
     }, [friends]);
 
     async function receiveFriend() {
-        console.log("receive friend props friends:")
-        console.log(friends)
-        const newUser = await axios.get(`${DOMAIN}/api/users/${user.userId}`)
-        console.log(newUser)
-        setFriends(newUser.data.friends)
-        console.log("friends:")
-        console.log(newUser.data.friends)
+        const newUser = await axios.get(`${DOMAIN}/api/users/${user.userId}`);
+        setFriends(newUser.data.friends);
     }
 
     useEffect(() => {

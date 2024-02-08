@@ -1,4 +1,10 @@
 
+/*
+author: Paul Kim
+date: February 8, 2024
+version: 1.0
+description: messages component for CapyTalk client
+ */
 
 import { useState, useEffect } from "react";
 

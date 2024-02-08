@@ -1,5 +1,10 @@
 
-
+/*
+author: Paul Kim
+date: February 8, 2024
+version: 1.0
+description: signup page for CapyTalk client
+ */
 
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -11,21 +16,20 @@ import Header from "../components/Header";
 export default function SignupPage() {
 
     const navigate = useNavigate();
-    const [message, setMessage] = useState("")
+    const [message, setMessage] = useState("");
 
     async function handleSubmit(e) {
-        e.preventDefault()
+        e.preventDefault();
         const username = e.target.username.value;
         const password = e.target.password.value;
-        const newUser = { username, password }
-        console.log(newUser)
-        const res = await axios.post(`${DOMAIN}/api/users/`, newUser)
+        const newUser = { username, password };
+        const res = await axios.post(`${DOMAIN}/api/users/`, newUser);
         if (res?.data.success) {
-            setMessage(res?.data.message)
-            navigate("/users/login")
+            setMessage(res?.data.message);
+            navigate("/users/login");
         }
         else {
-            setMessage(res?.data.message)
+            setMessage(res?.data.message);
         }
     }
 

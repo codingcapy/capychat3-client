@@ -1,10 +1,16 @@
 
+/*
+author: Paul Kim
+date: February 8, 2024
+version: 1.0
+description: friend profile component for CapyTalk client
+ */
 
-import { useState } from "react"
+import { useState } from "react";
 
 export default function FriendProfile(props) {
 
-    const [expanded, setExpanded] = useState(false)
+    const [expanded, setExpanded] = useState(false);
 
     return (
         <div className="px-5 border-2 border-slate-600 min-w-full h-screen overflow-y-auto">

@@ -1,29 +1,35 @@
 
+/*
+author: Paul Kim
+date: February 8, 2024
+version: 1.0
+description: login page for CapyTalk client
+ */
 
-import { NavLink, useNavigate } from "react-router-dom"
-import Header from "../components/Header"
-import Footer from "../components/Footer"
+import { NavLink, useNavigate } from "react-router-dom";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import useAuthStore from "../store/AuthStore";
 
 export default function LoginPage() {
 
     const navigate = useNavigate();
-    const { loginService, authLoading, user } = useAuthStore((state) => state)
+    const { loginService, authLoading, user } = useAuthStore((state) => state);
     const [message, setMessage] = useState("");
 
     useEffect(() => {
         if (!!user) {
-            navigate(`/dashboard/${user.userId}`)
+            navigate(`/dashboard/${user.userId}`);
         }
     }, [user])
 
     function onLogin(e) {
-        e.preventDefault()
+        e.preventDefault();
         let username = e.target.username?.value;
-        let password = e.target.password?.value
-        if (!username || !password) return
-        loginService(username, password)
+        let password = e.target.password?.value;
+        if (!username || !password) return;
+        loginService(username, password);
         if (!user) {
             setMessage("Invalid login credentials");
         }

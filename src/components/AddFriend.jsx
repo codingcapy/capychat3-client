@@ -1,7 +1,12 @@
 
+/*
+author: Paul Kim
+date: February 8, 2024
+version: 1.0
+description: add friend component for CapyTalk client
+ */
 
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import io from "socket.io-client";
 import axios from "axios";
 import DOMAIN from "../services/endpoint";
@@ -10,51 +15,27 @@ const socket = io("http://localhost:3333");
 
 export default function AddFriend(props) {
 
-    const navigate = useNavigate();
-    const [message, setMessage] = useState("")
-    const [inputFriend, setinputFriend] = useState("")
-
-    console.log(props.friends)
-    console.log(props.setFriends)
-    console.log(props.user)
-
+    const [message, setMessage] = useState("");
+    const [inputFriend, setinputFriend] = useState("");
 
     async function handleSubmit(e) {
         e.preventDefault()
-        const username = props.currentUser
+        const username = props.currentUser;
         const friend = e.target.frienduser.value;
-        const data = { username, friend }
-        const res = await axios.post(`${DOMAIN}/api/user/friends`, data)
+        const data = { username, friend };
+        const res = await axios.post(`${DOMAIN}/api/user/friends`, data);
         if (res?.data.success) {
-            setMessage(res?.data.message)
-            const user = await axios.get(`${DOMAIN}/api/users/${props.user.userId}`)
-            props.setFriends(user.data.friends)
-            setinputFriend("")
+            setMessage(res?.data.message);
+            const user = await axios.get(`${DOMAIN}/api/users/${props.user.userId}`);
+            props.setFriends(user.data.friends);
+            setinputFriend("");
             socket.emit("friend", data.friend);
-            // navigate(`/dashboard/${props.user.userId}`)
         }
         else {
-            setMessage(res?.data.message)
-            setinputFriend("")
+            setMessage(res?.data.message);
+            setinputFriend("");
         }
     }
-
-    // useEffect(() => {
-    //     console.log("use effect props friends:")
-    //     console.log(props.friends)
-    //     socket.on("friend", receiveFriend);
-    //     return () => socket.off("friend", receiveFriend);
-    // }, [props.friends]);
-
-    // async function receiveFriend() {
-    //     console.log("receive friend props friends:")
-    //     console.log(props.friends) // null
-    //     const newUser = await axios.get(`${DOMAIN}/api/users/${props.user.userId}`)
-    //     console.log(newUser)
-    //     props.setFriends(newUser.data.friends)
-    //     console.log("friends:")
-    //     console.log(newUser.data.friends)
-    // }
 
     return (
         <div className="px-5 flex-2 border-2 min-w-full h-screen overflow-y-auto ">

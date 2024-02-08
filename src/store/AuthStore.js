@@ -1,9 +1,9 @@
 
 /*
 author: Paul Kim
-date: December 15, 2023
+date: February 8, 2024
 version: 1.0
-description: AuthStore for CocoDogo
+description: AuthStore for CapyTalk client
  */
 
 import DOMAIN from "../services/endpoint";

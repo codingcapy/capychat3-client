@@ -1,5 +1,10 @@
 
-
+/*
+author: Paul Kim
+date: February 8, 2024
+version: 1.0
+description: chat component for CapyTalk client
+ */
 
 export default function Chats(props) {
 

@@ -1,9 +1,9 @@
 
 /*
 author: Paul Kim
-date: December 15, 2023
+date: February 8, 2024
 version: 1.0
-description: Auth component for CocoDogo
+description: auth component for CapyTalk client
  */
 
 import { jwtDecode } from "jwt-decode";

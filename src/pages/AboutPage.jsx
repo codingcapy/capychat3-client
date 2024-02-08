@@ -1,7 +1,14 @@
 
-import paulImg from "/paul_kim.jpg"
-import Header from "../components/Header"
-import Footer from "../components/Footer"
+/*
+author: Paul Kim
+date: February 8, 2024
+version: 1.0
+description: about page for CapyTalk client
+ */
+
+import paulImg from "/paul_kim.jpg";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 export default function AboutPage() {
 

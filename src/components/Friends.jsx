@@ -1,14 +1,12 @@
 
-
-import { useEffect, useState } from "react"
+/*
+author: Paul Kim
+date: February 8, 2024
+version: 1.0
+description: friends component for CapyTalk client
+ */
 
 export default function Friends(props) {
-
-    const [friends, setFriends] = useState(
-        props.friends.map((friend) => <div key={friend} onClick={() => props.clickedFriend(friend)} className="cursor-pointer">
-            {friend}
-        </div>)
-    )
 
     return (
         <div className="px-5 flex-2 border-2 border-slate-600 min-w-72 h-screen overflow-y-auto">

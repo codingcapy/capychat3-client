@@ -1,27 +1,33 @@
 
+/*
+author: Paul Kim
+date: February 8, 2024
+version: 1.0
+description: contact page for CapyTalk client
+ */
 
-import axios from "axios"
-import DOMAIN from "../services/endpoint"
-import { useState } from "react"
-import Header from "../components/Header"
-import Footer from "../components/Footer"
+import axios from "axios";
+import DOMAIN from "../services/endpoint";
+import { useState } from "react";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 export default function ContactPage() {
 
-    const [notification, setNotification] = useState("")
-    const [emailInput, setEmailInput] = useState("")
-    const [contentInput, setContentInput] = useState("")
+    const [notification, setNotification] = useState("");
+    const [emailInput, setEmailInput] = useState("");
+    const [contentInput, setContentInput] = useState("");
 
     async function handleSubmit(e) {
-        e.preventDefault()
+        e.preventDefault();
         const email = e.target.email.value;
-        const content = e.target.content.value
-        const newMessage = { email, content }
-        const res = await axios.post(`${DOMAIN}/api/comments`, newMessage)
+        const content = e.target.content.value;
+        const newMessage = { email, content };
+        const res = await axios.post(`${DOMAIN}/api/comments`, newMessage);
         if (res?.data.success) {
-            setNotification("Thank you for your message! If a response is required, we will get back to you as soon as possible!")
-            setEmailInput("")
-            setContentInput("")
+            setNotification("Thank you for your message! If a response is required, we will get back to you as soon as possible!");
+            setEmailInput("");
+            setContentInput("");
         }
     }
 
