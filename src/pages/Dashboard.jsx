@@ -213,10 +213,10 @@ export default function Dashboard() {
                 </div>
                 <div className="px-3 md:hidden">
                     {chatsMode && <Chats chats={chats} clickedChat={clickedChat} />}
-                    {friendsMode && <Friends clickedAddFriend={clickedAddFriend} clickedFriend={clickedFriend} friends={friends} />}
+                    {friendsMode && <Friends clickedAddFriend={clickedAddFriend} clickedFriend={clickedFriend} user={user} friends={friends} setFriends={setFriends} />}
                     {messagesMode && <Messages currentChat={currentChat} currentUser={user.username} handleCreateMessage={handleCreateMessage} message={message} inputMessage={inputMessage} setInputMessage={setInputMessage} />}
                     {showAddFriend && <AddFriend currentUser={user.username} setFriends={setFriends} user={user} />}
-                    {showFriend && <FriendProfile handleCreateChat={handleCreateChat} friendName={friend} message={message} />}
+                    {showFriend && <FriendProfile handleCreateChat={handleCreateChat} friendName={friend} user={user} message={message} inputChat={inputChat} setInputChat={setInputChat} />}
                 </div>
             </main>
             <div
@@ -229,6 +229,7 @@ export default function Dashboard() {
                 <div className="px-5" onClick={tappedChats}>
                     Chats
                 </div>
+                <NavLink to={`/dashboard/${user.userId}`} className="px-5">{user.username}</NavLink>
                 <NavLink to="/" onClick={logoutService} className="px-5">Logout</NavLink>
             </div>
         </div>

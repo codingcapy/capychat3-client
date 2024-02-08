@@ -18,8 +18,8 @@ export default function Header() {
                 <NavLink to="/" className="text-center py-2 md:py-4 px-5">Home</NavLink>
             </div>}
             {expandedMenu && <div className="flex flex-col md:block md:py-4">
-                <NavLink className="text-center py-2 md:py-4 px-5">About</NavLink>
-                <NavLink className="text-center py-2 md:py-4 px-5">Contact</NavLink>
+                <NavLink to="/about" className="text-center py-2 md:py-4 px-5">About</NavLink>
+                <NavLink to="/contact" className="text-center py-2 md:py-4 px-5">Contact</NavLink>
             </div>}
             {expandedMenu && <div className="flex flex-col md:block md:py-4">
                 <NavLink to="/users/login" className="text-center py-2 md:py-4 px-5">Login</NavLink>
