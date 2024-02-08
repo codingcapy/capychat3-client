@@ -1,7 +1,7 @@
 
 
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import io from "socket.io-client";
 import axios from "axios";
 import DOMAIN from "../services/endpoint";
@@ -14,6 +14,11 @@ export default function AddFriend(props) {
     const [message, setMessage] = useState("")
     const [inputFriend, setinputFriend] = useState("")
 
+    console.log(props.friends)
+    console.log(props.setFriends)
+    console.log(props.user)
+
+
     async function handleSubmit(e) {
         e.preventDefault()
         const username = props.currentUser
@@ -25,7 +30,7 @@ export default function AddFriend(props) {
             const user = await axios.get(`${DOMAIN}/api/users/${props.user.userId}`)
             props.setFriends(user.data.friends)
             setinputFriend("")
-            socket.emit("friend", data);
+            socket.emit("friend", data.friend);
             // navigate(`/dashboard/${props.user.userId}`)
         }
         else {
@@ -33,6 +38,23 @@ export default function AddFriend(props) {
             setinputFriend("")
         }
     }
+
+    // useEffect(() => {
+    //     console.log("use effect props friends:")
+    //     console.log(props.friends)
+    //     socket.on("friend", receiveFriend);
+    //     return () => socket.off("friend", receiveFriend);
+    // }, [props.friends]);
+
+    // async function receiveFriend() {
+    //     console.log("receive friend props friends:")
+    //     console.log(props.friends) // null
+    //     const newUser = await axios.get(`${DOMAIN}/api/users/${props.user.userId}`)
+    //     console.log(newUser)
+    //     props.setFriends(newUser.data.friends)
+    //     console.log("friends:")
+    //     console.log(newUser.data.friends)
+    // }
 
     return (
         <div className="px-5 flex-2 border-2 min-w-full h-screen overflow-y-auto ">

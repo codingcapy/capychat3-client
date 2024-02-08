@@ -144,19 +144,13 @@ export default function Dashboard() {
     }
 
     useEffect(() => {
-        console.log("use effect current chat:")
-        console.log(currentChat)
         socket.on("message", receiveMessage);
         return () => socket.off("message", receiveMessage);
     }, [currentChat]);
 
     async function receiveMessage() {
-        console.log("receive message current chat:")
-        console.log(currentChat) // null
         const newChat = await axios.get(`${DOMAIN}/api/chats/${currentChat.chatId}`)
         setCurrentChat(newChat.data)
-        console.log("after")
-        console.log(currentChat)
     }
 
     useEffect(() => {
@@ -166,8 +160,24 @@ export default function Dashboard() {
 
     async function receiveChat() {
         const newUser = await axios.get(`${DOMAIN}/api/users/${user.userId}`)
-        console.log(newUser)
         setChats(newUser.data.chats)
+    }
+
+    useEffect(() => {
+        console.log("use effect props friends:")
+        console.log(friends)
+        socket.on("friend", receiveFriend);
+        return () => socket.off("friend", receiveFriend);
+    }, [friends]);
+
+    async function receiveFriend() {
+        console.log("receive friend props friends:")
+        console.log(friends)
+        const newUser = await axios.get(`${DOMAIN}/api/users/${user.userId}`)
+        console.log(newUser)
+        setFriends(newUser.data.friends)
+        console.log("friends:")
+        console.log(newUser.data.friends)
     }
 
     useEffect(() => {
@@ -187,13 +197,13 @@ export default function Dashboard() {
             <main className="flex-1">
                 <div className="hidden md:flex">
                     <div className="flex">
-                        <Friends clickedAddFriend={clickedAddFriend} clickedFriend={clickedFriend} friends={friends} />
+                        <Friends clickedAddFriend={clickedAddFriend} clickedFriend={clickedFriend} user={user} friends={friends} setFriends={setFriends} />
                         <Chats clickedChat={clickedChat} chats={chats} />
                         {showDefault && <div className="px-5 border-2 border-slate-600 bg-slate-800 min-w-full h-screen overflow-y-auto">
                             <div className="text-xl sticky top-0 bg-slate-800 py-5">Messages</div>
                         </div>}
                         {showMessages && <Messages currentChat={currentChat} currentUser={user.username} handleCreateMessage={handleCreateMessage} message={message} inputMessage={inputMessage} setInputMessage={setInputMessage} />}
-                        {showAddFriend && <AddFriend currentUser={user.username} setFriends={setFriends} user={user} />}
+                        {showAddFriend && <AddFriend currentUser={user.username} setFriends={setFriends} user={user} friends={friends} />}
                         {showFriend && <FriendProfile handleCreateChat={handleCreateChat} friendName={friend} user={user} message={message} inputChat={inputChat} setInputChat={setInputChat} />}
                         <div className="flex flex-col">
                             <NavLink to={`/dashboard/${user.userId}`} className="px-5 py-5 bg-slate-800 font-bold">{user.username}</NavLink>
