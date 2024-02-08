@@ -1,8 +1,7 @@
-# React + Vite
+# CapyTalk Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the client side front end of CapyTalk, a chat app that I developed recently. It uses React and Vite bundler, as well as Tailwind, zustand, socket.io jwt, axios and react-router-dom.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+To run:
+1. npm install
+2. npm run dev
