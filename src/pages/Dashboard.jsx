@@ -32,6 +32,7 @@ export default function Dashboard() {
     const [friends, setFriends] = useState(user.friends)
     const [chats, setChats] = useState(user.chats)
     const [currentChat, setCurrentChat] = useState(null)
+    const [currentChatId, setCurrentChatId] = useState(null)
     const [inputChat, setInputChat] = useState("")
     const [inputMessage, setInputMessage] = useState("")
 
@@ -82,10 +83,11 @@ export default function Dashboard() {
     }
     async function clickedChat(chat) {
         const newChat = await axios.get(`${DOMAIN}/api/chats/${chat.chatId}`)
+        setCurrentChatId(chat.chatId)
         setCurrentChat(newChat.data)
         console.log("current chat is")
-        console.log(currentChat)
         setShowMessages(true)
+        console.log(currentChat) // null
         setShowAddFriend(false)
         setShowFriend(false)
         setShowDefault(false)
@@ -128,7 +130,6 @@ export default function Dashboard() {
         const message = { content, user: currentUser, chatId: currentChat.chatId }
         const res = await axios.post(`${DOMAIN}/api/messages`, message)
         if (res?.data.success) {
-            console.log(`${DOMAIN}/api/chats/${currentChat.chatId}`)
             const newChat = await axios.get(`${DOMAIN}/api/chats/${currentChat.chatId}`)
             setMessage(res?.data.message)
             setCurrentChat(newChat.data)
@@ -142,14 +143,19 @@ export default function Dashboard() {
     }
 
     useEffect(() => {
+        console.log("use effect current chat:")
+        console.log(currentChat)
         socket.on("message", receiveMessage);
-        console.log(message);
         return () => socket.off("message", receiveMessage);
-    }, []);
+    }, [currentChat]);
 
-    async function receiveMessage(){
+    async function receiveMessage() {
+        console.log("receive message current chat:")
+        console.log(currentChat) // null
         const newChat = await axios.get(`${DOMAIN}/api/chats/${currentChat.chatId}`)
         setCurrentChat(newChat.data)
+        console.log("after")
+        console.log(currentChat)
     }
 
     useEffect(() => {
