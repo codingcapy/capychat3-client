@@ -24,10 +24,7 @@ export default function Dashboard() {
 
     const { logoutService, user } = useAuthStore((state) => state);
     const [chatsMode, setChatsMode] = useState(true);
-    const [messagesMode, setMessagesMode] = useState(false);
     const [friendsMode, setFriendsMode] = useState(false);
-    const [addFriendMode, setAddFriendMode] = useState(false);
-    const [friendMode, setFriendMode] = useState(false);
     const [showDefault, setShowDefault] = useState(true);
     const [showAddFriend, setShowAddFriend] = useState(false);
     const [showFriend, setShowFriend] = useState(false);
@@ -37,48 +34,47 @@ export default function Dashboard() {
     const [friends, setFriends] = useState(user.friends);
     const [chats, setChats] = useState(user.chats);
     const [currentChat, setCurrentChat] = useState(null);
-    const [currentChatId, setCurrentChatId] = useState(null);
     const [inputChat, setInputChat] = useState("");
     const [inputMessage, setInputMessage] = useState("");
 
     function tappedChats() {
         setChatsMode(true);
-        setMessagesMode(false);
         setFriendsMode(false);
-        setAddFriendMode(false);
-        setFriendMode(false);
+        setShowMessages(false);
+        setShowAddFriend(false);
+        setShowFriend(false);
     }
 
     function tappedChat() {
         setChatsMode(false);
-        setMessagesMode(true);
+        setShowMessages(true);
         setFriendsMode(false);
-        setAddFriendMode(false);
-        setFriendMode(false);
+        setShowAddFriend(false);
+        setShowFriend(false);
     }
 
     function tappedFriends() {
         setChatsMode(false);
-        setMessagesMode(false);
+        setShowMessages(false);
         setFriendsMode(true);
-        setAddFriendMode(false);
-        setFriendMode(false);
+        setShowAddFriend(false);
+        setShowFriend(false);
     }
 
     function tappedAddFriend() {
         setChatsMode(false);
-        setMessagesMode(false);
+        setShowMessages(false);
         setFriendsMode(false);
-        setAddFriendMode(true);
-        setFriendMode(false);
+        setShowAddFriend(true);
+        setShowFriend(false);
     }
 
     function tappedFriend() {
         setChatsMode(false);
-        setMessagesMode(false);
+        setShowMessages(false);
         setFriendsMode(false);
-        setAddFriendMode(false);
-        setFriendMode(true);
+        setShowAddFriend(false);
+        setShowFriend(true);
     }
 
     function clickedAddFriend() {
@@ -91,7 +87,6 @@ export default function Dashboard() {
 
     async function clickedChat(chat) {
         const newChat = await axios.get(`${DOMAIN}/api/chats/${chat.chatId}`);
-        setCurrentChatId(chat.chatId);
         setCurrentChat(newChat.data);
         setShowMessages(true);
         setShowAddFriend(false);
@@ -214,7 +209,7 @@ export default function Dashboard() {
                 <div className="px-3 md:hidden">
                     {chatsMode && <Chats chats={chats} clickedChat={clickedChat} />}
                     {friendsMode && <Friends clickedAddFriend={clickedAddFriend} clickedFriend={clickedFriend} user={user} friends={friends} setFriends={setFriends} />}
-                    {messagesMode && <Messages currentChat={currentChat} currentUser={user.username} handleCreateMessage={handleCreateMessage} message={message} inputMessage={inputMessage} setInputMessage={setInputMessage} />}
+                    {showMessages && <Messages currentChat={currentChat} currentUser={user.username} handleCreateMessage={handleCreateMessage} message={message} inputMessage={inputMessage} setInputMessage={setInputMessage} />}
                     {showAddFriend && <AddFriend currentUser={user.username} setFriends={setFriends} user={user} />}
                     {showFriend && <FriendProfile handleCreateChat={handleCreateChat} friendName={friend} user={user} message={message} inputChat={inputChat} setInputChat={setInputChat} />}
                 </div>

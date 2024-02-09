@@ -6,11 +6,12 @@ version: 1.0
 description: messages component for CapyTalk client
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function Messages(props) {
 
     const [isMenuSticky, setIsMenuSticky] = useState(false);
+    const messagesEndRef = useRef(null);
 
     useEffect(() => {
         function handleScroll() {
@@ -19,10 +20,15 @@ export default function Messages(props) {
             setIsMenuSticky(scrollPosition > scrollThreshold);
         }
         window.addEventListener("scroll", handleScroll);
+        scrollToBottom();
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
-    }, []);
+    }, [props.currentChat.messages]);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
 
     return (
         <div className="px-5 border-2 border-slate-600 bg-slate-800 min-w-full h-screen overflow-y-auto">
@@ -33,6 +39,7 @@ export default function Messages(props) {
                     <div key={message.messageId} className="py-2">
                         <div className="flex"><div className="font-bold">{message.username}</div><div className="pl-2">on {message.date}</div></div><div>{message.content}</div>
                     </div>)}
+                <div ref={messagesEndRef} />
                 <div className={`py-10 bg-slate-800 sticky z-20 ${isMenuSticky ? "top-0" : "bottom-0"
                     }`}>
                     <form onSubmit={props.handleCreateMessage}>
